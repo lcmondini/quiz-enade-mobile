@@ -116,7 +116,7 @@ export default function Profile() {
           />
 
           <SubmitButton onPress={handleSubmit}>Atualizar perfil</SubmitButton>
-          <LogoutButton onPress={handleLogout}>Sair do Gobarber</LogoutButton>
+          <LogoutButton onPress={handleLogout}>Sair do Quiz Enade</LogoutButton>
         </Form>
       </Container>
     </Background>

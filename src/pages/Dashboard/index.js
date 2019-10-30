@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { withNavigationFocus } from 'react-navigation';
+
 import api from '~/services/api';
 
 import Background from '~/components/Background';
@@ -7,17 +9,20 @@ import Appointment from '~/components/Appointment';
 
 import { Container, Title, List } from './styles';
 
-export default function Dashboard() {
+function Dashboard({ isFocused }) {
   const [appointments, setAppointments] = useState([]);
 
-  useEffect(() => {
-    async function loadAppointments() {
-      const response = await api.get('appointments');
+  async function loadAppointments() {
+    const response = await api.get('appointments');
 
-      setAppointments(response.data);
+    setAppointments(response.data);
+  }
+
+  useEffect(() => {
+    if (isFocused) {
+      loadAppointments();
     }
-    loadAppointments();
-  }, []);
+  }, [isFocused]);
 
   async function handleCancel(id) {
     const response = await api.delete(`appointments/${id}`);
@@ -37,7 +42,7 @@ export default function Dashboard() {
   return (
     <Background>
       <Container>
-        <Title>Agendamentos</Title>
+        <Title>Quiz</Title>
 
         <List
           data={appointments}
@@ -52,8 +57,10 @@ export default function Dashboard() {
 }
 
 Dashboard.navigationOptions = {
-  tabBarLabel: 'Agendamentos',
+  tabBarLabel: 'Quiz',
   tabBarIcon: ({ tintColor }) => (
-    <Icon name="event" size={20} color={tintColor} />
+    <Icon name="assignment" size={20} color={tintColor} />
   ),
 };
+
+export default withNavigationFocus(Dashboard);

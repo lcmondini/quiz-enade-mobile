@@ -45,10 +45,10 @@ export default (isSigned = false) =>
               ),
               navigationOptions: {
                 tabBarVisible: false,
-                tabBarLabel: 'Agendar',
+                tabBarLabel: 'Chat',
                 tabBarIcon: (
                   <Icon
-                    name="add-circle-outline"
+                    name="mode-comment"
                     size={20}
                     color="rgba(255, 255, 255, 0.6)"
                   />
@@ -58,12 +58,13 @@ export default (isSigned = false) =>
             Profile,
           },
           {
+            resetOnBlur: true,
             tabBarOptions: {
               keyboardHidesTabBar: true,
               activeTintColor: '#fff',
               inactiveTintColor: 'rgba(255, 255, 255, 0.6)',
               style: {
-                backgroundColor: '#8d41a8',
+                backgroundColor: '#02509e',
               },
             },
           },

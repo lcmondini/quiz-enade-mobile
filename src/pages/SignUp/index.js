@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import { Image } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
-import logo from '~/assets/logo.png';
+import logo from '~/assets/logo-lasalle-shield.png';
 
 import Background from '~/components/Background';
 import { signUpRequest } from '~/store/modules/auth/actions';
