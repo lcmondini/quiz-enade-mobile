@@ -48,7 +48,7 @@ export default (isSigned = false) =>
                 tabBarLabel: 'Chat',
                 tabBarIcon: (
                   <Icon
-                    name="mode-comment"
+                    name="chat"
                     size={20}
                     color="rgba(255, 255, 255, 0.6)"
                   />
