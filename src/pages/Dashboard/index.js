@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import { useSelector } from 'react-redux';
 import { withNavigationFocus } from 'react-navigation';
 
 import api from '~/services/api';
@@ -7,9 +7,10 @@ import api from '~/services/api';
 import Background from '~/components/Background';
 import Appointment from '~/components/Appointment';
 
-import { Container, Title, List } from './styles';
+import { Container, Title, Separator, QuizButton } from './styles';
 
-function Dashboard({ isFocused }) {
+function Dashboard({ isFocused, navigation }) {
+  const profile = useSelector(state => state.user.profile);
   const [appointments, setAppointments] = useState([]);
 
   async function loadAppointments() {
@@ -42,25 +43,16 @@ function Dashboard({ isFocused }) {
   return (
     <Background>
       <Container>
-        <Title>Quiz</Title>
-
-        <List
-          data={appointments}
-          keyExtractor={item => String(item.id)}
-          renderItem={({ item }) => (
-            <Appointment onCancel={() => handleCancel(item.id)} data={item} />
-          )}
-        />
+        <Title>{profile.name}</Title>
+        <QuizButton
+          onPress={() => {
+            navigation.navigate('Quiz');
+          }}>
+          Iniciar Quiz
+        </QuizButton>
       </Container>
     </Background>
   );
 }
-
-Dashboard.navigationOptions = {
-  tabBarLabel: 'Quiz',
-  tabBarIcon: ({ tintColor }) => (
-    <Icon name="assignment" size={20} color={tintColor} />
-  ),
-};
 
 export default withNavigationFocus(Dashboard);

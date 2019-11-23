@@ -20,12 +20,14 @@ export default function Profile() {
   const dispatch = useDispatch();
   const profile = useSelector(state => state.user.profile);
 
+  const courseRef = useRef();
   const emailRef = useRef();
   const oldPasswordRef = useRef();
   const passwordRef = useRef();
   const confirmPasswordRef = useRef();
 
   const [name, setName] = useState(profile.name);
+  const [course, setCourse] = useState(profile.course);
   const [email, setEmail] = useState(profile.email);
   const [oldPassword, setOldPassword] = useState('');
   const [password, setPassword] = useState('');
@@ -41,6 +43,7 @@ export default function Profile() {
     dispatch(
       updateProfileRequest({
         name,
+        course,
         email,
         oldPassword,
         password,
@@ -65,9 +68,19 @@ export default function Profile() {
             autoCapitalize="none"
             placeholder="Digite seu nome completo"
             returnKeyType="next"
-            onSubmitEditing={() => emailRef.current.focus()}
+            onSubmitEditing={() => courseRef.current.focus()}
             value={name}
             onChangeText={setName}
+          />
+          <FormInput
+            icon="person-outline"
+            autoCorrect={false}
+            autoCapitalize="none"
+            placeholder="Digite seu curso"
+            returnKeyType="next"
+            onSubmitEditing={() => emailRef.current.focus()}
+            value={course}
+            onChangeText={setCourse}
           />
           <FormInput
             icon="mail-outline"

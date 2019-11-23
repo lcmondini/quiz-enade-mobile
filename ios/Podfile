@@ -38,6 +38,19 @@ target 'modulo10' do
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
+  # React Native
+  rn_path = '../node_modules/react-native'
+  rn_maps_path = '../node_modules/react-native-maps'
+
+  # Required by Google Map, ignore if you use Apple Map
+  pod 'GoogleMaps', '3.2.0'
+  pod 'Google-Maps-iOS-Utils', '2.1.0'
+  pod 'GoogleUtilities', '5.3.7'
+  pod 'GoogleAppMeasurement', '5.4'
+
+  pod 'react-native-maps', path: rn_maps_path
+  pod 'react-native-google-maps', path: rn_maps_path # <~~ if you need GoogleMaps support on iOS
+
   target 'modulo10Tests' do
     inherit! :search_paths
     # Pods for testing
@@ -54,4 +67,17 @@ target 'modulo10-tvOS' do
     # Pods for testing
   end
 
+end
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+      if target.name == "react-native-google-maps"
+          target.build_configurations.each do |config|
+              config.build_settings['CLANG_ENABLE_MODULES'] = 'No'
+          end
+      end
+      if target.name == "React"
+        target.remove_from_project
+      end
+  end
 end

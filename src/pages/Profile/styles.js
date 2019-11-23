@@ -38,5 +38,5 @@ export const SubmitButton = styled(Button)`
 
 export const LogoutButton = styled(Button)`
   margin-top: 10px;
-  background: #f64c75;
+  background: #ea4335;
 `;

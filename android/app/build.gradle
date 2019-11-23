@@ -201,3 +201,29 @@ task copyDownloadableDepsToLibs(type: Copy) {
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
+
+// upgrade sdk version
+android {
+    compileSdkVersion 27
+    buildToolsVersion '27.0.3'
+
+    defaultConfig {
+        targetSdkVersion 23 // Upgrade target to 23 (You will need use this to check android permission correctly)
+        ...
+    }
+    ...
+}
+
+
+// update dependencies
+dependencies {
+    ...
+    // Paste these line
+    implementation(project(':react-native-maps')){
+        exclude group: 'com.google.android.gms', module: 'play-services-base'
+        exclude group: 'com.google.android.gms', module: 'play-services-maps'
+    }
+    implementation "com.google.android.gms:play-services-location:${rootProject.ext.googlePlayServicesVersion}" // disable if you don't want to use enableHighAccuracy: true in geolocation
+    implementation "com.google.android.gms:play-services-base:${rootProject.ext.googlePlayServicesVersion}"
+    implementation "com.google.android.gms:play-services-maps:${rootProject.ext.googlePlayServicesVersion}"
+}

@@ -19,17 +19,19 @@ import {
 export default function SignUp({ navigation }) {
   const dispatch = useDispatch();
 
+  const courseRef = useRef();
   const emailRef = useRef();
   const passwordRef = useRef();
 
   const [name, setName] = useState('');
+  const [course, setCourse] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const loading = useSelector(state => state.auth.loading);
 
   function handleSubmit() {
-    dispatch(signUpRequest(name, email, password));
+    dispatch(signUpRequest(name, course, email, password));
   }
 
   return (
@@ -44,9 +46,19 @@ export default function SignUp({ navigation }) {
             autoCapitalize="none"
             placeholder="Digite seu nome completo"
             returnKeyType="next"
-            onSubmitEditing={() => emailRef.current.focus()}
+            onSubmitEditing={() => courseRef.current.focus()}
             value={name}
             onChangeText={setName}
+          />
+          <FormInput
+            icon="person-outline"
+            autoCorrect={false}
+            autoCapitalize="none"
+            placeholder="Digite seu curso"
+            returnKeyType="next"
+            onSubmitEditing={() => emailRef.current.focus()}
+            value={course}
+            onChangeText={setCourse}
           />
           <FormInput
             icon="mail-outline"

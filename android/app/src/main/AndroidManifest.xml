@@ -2,6 +2,11 @@
   package="com.modulo10">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    // 2 Permission bellow are not required, just use when you have to use geolocation API
+    // If you need FINE location, insert this one
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    // Or insert this line if you don't need FINE location
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
       android:name=".MainApplication"
@@ -21,6 +26,11 @@
         </intent-filter>
       </activity>
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
+      <uses-library android:name="org.apache.http.legacy" android:required="false" /> <!-- insert this line to fix android target 28+ -->
+        <!-- You will only need to add this meta-data tag, but make sure it's a child of application -->
+        <meta-data
+          android:name="com.google.android.geo.API_KEY"
+          android:value="AIzaSyC8hhFuU8gmygMdQyeJMv_Zk-2_pYD8XRo"/>
     </application>
 
 </manifest>

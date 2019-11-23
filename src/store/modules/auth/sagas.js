@@ -16,11 +16,8 @@ export function* signIn({ payload }) {
 
     const { token, user } = response.data;
 
-    if (user.provider) {
-      Alert.alert(
-        'Erro no login',
-        'O usuário não pode ser prestador de serviços',
-      );
+    if (user.coordinator) {
+      Alert.alert('Erro no login', 'O usuário não pode ser coordenador');
       return;
     }
 
@@ -40,10 +37,11 @@ export function* signIn({ payload }) {
 
 export function* signUp({ payload }) {
   try {
-    const { name, email, password } = payload;
+    const { name, course, email, password } = payload;
 
     yield call(api.post, 'users', {
       name,
+      course,
       email,
       password,
     });

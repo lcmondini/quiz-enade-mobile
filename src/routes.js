@@ -8,12 +8,11 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 
-import SelectProvider from './pages/New/SelectProvider';
-import SelectDateTime from './pages/New/SelectDateTime';
-import Confirm from './pages/New/Confirm';
-
 import Dashboard from './pages/Dashboard';
 import Profile from './pages/Profile';
+import Chat from './pages/Chat';
+import Quiz from './pages/Quiz';
+import Rank from './pages/Rank';
 
 export default (isSigned = false) =>
   createAppContainer(
@@ -25,13 +24,34 @@ export default (isSigned = false) =>
         }),
         App: createBottomTabNavigator(
           {
-            Dashboard,
+            Dashboard: {
+              screen: createStackNavigator(
+                {
+                  Dashboard,
+                  Quiz,
+                },
+                {
+                  defaultNavigationOptions: {
+                    headerTransparent: true,
+                    headerTintColor: '#fff',
+                    headerLeftContainerStyle: {
+                      marginLeft: 20,
+                    },
+                  },
+                },
+              ),
+              navigationOptions: {
+                tabBarLabel: 'Quiz',
+                tabBarIcon: ({ tintColor }) => (
+                  <Icon name="assignment" size={20} color={tintColor} />
+                ),
+              },
+            },
+            Rank,
             New: {
               screen: createStackNavigator(
                 {
-                  SelectProvider,
-                  SelectDateTime,
-                  Confirm,
+                  Chat,
                 },
                 {
                   defaultNavigationOptions: {
