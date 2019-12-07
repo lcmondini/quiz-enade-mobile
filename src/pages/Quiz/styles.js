@@ -24,5 +24,9 @@ export const Description = styled.Text`
 `;
 
 export const SubmitButton = styled(Button)`
-  margin-bottom: 30px;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  height: 50;
 `;

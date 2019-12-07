@@ -3,7 +3,12 @@ import { takeLatest, call, put, all } from 'redux-saga/effects';
 
 import api from '~/services/api';
 
-import { updateProfileSuccess, updateProfileFailure } from './actions';
+import {
+  updateProfileSuccess,
+  updateProfileFailure,
+  updatePointsSuccess,
+  updatePointsFailure,
+} from './actions';
 
 export function* updateProfile({ payload }) {
   try {
@@ -28,4 +33,30 @@ export function* updateProfile({ payload }) {
   }
 }
 
-export default all([takeLatest('@user/UPDATE_PROFILE_REQUEST', updateProfile)]);
+export function* updatePoints({ payload }) {
+  try {
+    const { name, email, level, points } = payload.data;
+
+    const profile = {
+      name,
+      email,
+      level,
+      points,
+    };
+
+    const response = yield call(api.put, 'users', profile);
+
+    yield put(updatePointsSuccess(response.data));
+  } catch (err) {
+    Alert.alert(
+      'Falha na atualização',
+      'Houve um erro na atualização dos pontos',
+    );
+    yield put(updatePointsFailure());
+  }
+}
+
+export default all([
+  takeLatest('@user/UPDATE_PROFILE_REQUEST', updateProfile),
+  takeLatest('@user/UPDATE_POINTS_REQUEST', updatePoints),
+]);
