@@ -18,11 +18,25 @@ export const Separator = styled.View`
   margin: 20px 0 10px;
 `;
 
-export const Info = styled.Text`
+export const Info = styled.View`
+  margin-top: 10px;
+  width: 200px;
+  flex-direction: row;
+  align-self: center;
+`;
+
+export const Position = styled.Text`
   font-size: 20px;
   color: #fff;
   font-weight: bold;
-  align-self: center;
+  margin-top: 10px;
+  padding-right: 30px;
+`;
+
+export const Name = styled.Text`
+  font-size: 20px;
+  color: #fff;
+  font-weight: bold;
   margin-top: 10px;
 `;
 

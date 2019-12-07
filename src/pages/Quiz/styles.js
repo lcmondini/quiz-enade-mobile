@@ -4,7 +4,6 @@ import Button from '~/components/Button';
 
 export const Container = styled.SafeAreaView`
   flex: 1;
-  flex-direction: row;
 `;
 
 export const List = styled.FlatList.attrs({
@@ -24,9 +23,5 @@ export const Description = styled.Text`
 `;
 
 export const SubmitButton = styled(Button)`
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  height: 50;
+  margin-top: 10px;
 `;

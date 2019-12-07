@@ -1,14 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { Dimensions, Text } from 'react-native';
+import React from 'react';
+import { View } from 'react-native';
 import { useSelector } from 'react-redux';
 import { withNavigationFocus } from 'react-navigation';
 import ProgressBarAnimated from 'react-native-progress-bar-animated';
 
-import api from '~/services/api';
-
 import Background from '~/components/Background';
 
-import { Container, Title, Info, Separator, QuizButton } from './styles';
+import {
+  Container,
+  Title,
+  InfoBox,
+  Info,
+  Label,
+  Text,
+  Separator,
+  QuizButton,
+} from './styles';
 
 function Dashboard({ isFocused, navigation }) {
   const profile = useSelector(state => state.user.profile);
@@ -20,10 +27,24 @@ function Dashboard({ isFocused, navigation }) {
       <Container>
         <Title>{profile.name}</Title>
         <Separator />
-        <Info>Level: {profile.level}</Info>
-        <Info>Exp: {profile.points}</Info>
-        <Separator />
-        <ProgressBarAnimated width={250} height={25} value={percent} />
+        <InfoBox>
+          <Info>
+            <Label>Nível:</Label>
+            <Text>{profile.level}</Text>
+          </Info>
+          <Info>
+            <Label>Exp.:</Label>
+            <Text>{profile.points}</Text>
+          </Info>
+          <Separator />
+          <ProgressBarAnimated
+            width={250}
+            height={25}
+            value={percent}
+            backgroundColor="#f3c014"
+          />
+          <Separator />
+        </InfoBox>
         <QuizButton
           onPress={() => {
             navigation.navigate('Quiz');

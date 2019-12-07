@@ -8,7 +8,7 @@ import api from '~/services/api';
 
 import Background from '~/components/Background';
 
-import { Container, Title, List, Info } from './styles';
+import { Container, Title, List, Info, Position, Name } from './styles';
 import { Separator } from '../Dashboard/styles';
 
 function Rank({ isFocused, navigation }) {
@@ -30,6 +30,8 @@ function Rank({ isFocused, navigation }) {
     }
   }, [isFocused, profile.course, profile.email]);
 
+  console.tron.log(users);
+
   return (
     <Background>
       <Container>
@@ -40,7 +42,10 @@ function Rank({ isFocused, navigation }) {
           keyExtractor={item => String(item.id)}
           renderItem={({ item }) => (
             <View>
-              <Info>{item.name}</Info>
+              <Info>
+                <Position>{item.ranking}º</Position>
+                <Name>{item.name}</Name>
+              </Info>
               <Separator />
             </View>
           )}
