@@ -1,42 +1,90 @@
-import React, { useState, useEffect } from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { TouchableOpacity } from 'react-native';
-import { useSelector } from 'react-redux';
-import { withNavigationFocus } from 'react-navigation';
-import Icon from 'react-native-vector-icons/FontAwesome5';
-
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import { GiftedChat } from 'react-native-gifted-chat';
 
 import Background from '~/components/Background';
-import Backend from '~/services/Backend';
+import firebase from 'firebase';
+//import Backend from '~/services/Backend';
 
+import api from '~/services/api';
+
+import 'prop-types';
 import { Container } from './styles';
-export default class Chat extends React.Component {
+
+const mapStateToProps = state => ({
+  profile: state.user.profile,
+});
+
+function setUid(value) {
+  this.uid = value;
+}
+function getUid() {
+  return this.uid;
+}
+// retrieve the messages from the Backend
+function loadMessages(callback, course) {
+  this.messagesRef = firebase.database().ref(course);
+  this.messagesRef.off();
+  const onReceive = data => {
+    const message = data.val();
+    callback({
+      _id: data.key,
+      text: message.text,
+      createdAt: new Date(message.createdAt),
+      user: {
+        _id: message.user._id,
+        name: message.user.name,
+      },
+    });
+  };
+  this.messagesRef.limitToLast(20).on('child_added', onReceive);
+}
+// send the message to the Backend
+function sendMessage(message) {
+  for (let i = 0; i < message.length; i++) {
+    this.messagesRef.push({
+      text: message[i].text,
+      user: message[i].user,
+      createdAt: firebase.database.ServerValue.TIMESTAMP,
+    });
+  }
+}
+// close the connection to the Backend
+function closeChat() {
+  if (this.messagesRef) {
+    this.messagesRef.off();
+  }
+}
+class Chat extends Component {
   state = {
     messages: [],
   };
-
-  componentWillMount() {
-    this.setState({
-      messages: [
-        {
-          _id: 1,
-          text: 'Hello developer',
-          createdAt: new Date(),
-          user: {
-            _id: 2,
-            name: 'React Native',
-            avatar: 'https://placeimg.com/140/140/any',
-          },
-        },
-      ],
-    });
+  uid = '';
+  messagesRef = null;
+  // initialize Firebase Backend
+  constructor() {
+    super();
+    if (!firebase.apps.length) {
+      firebase.initializeApp({
+        apiKey: 'AIzaSyDZTOXOT2waYz2dNTQiYjGGMdcPeZmVlpQ',
+        authDomain: 'quiz-enade.firebaseapp.com',
+        databaseURL: 'https://quiz-enade.firebaseio.com',
+        storageBucket: 'quiz-enade.appspot.com',
+      });
+      firebase.auth().signInAnonymously();
+    }
   }
 
-  onSend(messages = []) {
-    console.tron.log(messages);
-    this.setState(previousState => ({
-      messages: GiftedChat.append(previousState.messages, messages),
-    }));
+  componentDidMount() {
+    loadMessages(message => {
+      this.setState(previousState => {
+        return {
+          messages: GiftedChat.append(previousState.messages, message),
+        };
+      });
+    }, this.props.profile.course);
   }
 
   render() {
@@ -45,9 +93,13 @@ export default class Chat extends React.Component {
         <Container>
           <GiftedChat
             messages={this.state.messages}
-            onSend={messages => this.onSend(messages)}
+            onSend={message => {
+              // send message to the backend.
+              sendMessage(message);
+            }}
             user={{
-              _id: 1,
+              _id: this.props.profile.id,
+              name: this.props.profile.name,
             }}
           />
         </Container>
@@ -67,3 +119,5 @@ Chat.navigationOptions = ({ navigation }) => ({
     </TouchableOpacity>
   ),
 });
+
+export default connect(mapStateToProps)(Chat);
