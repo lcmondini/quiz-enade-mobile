@@ -11,8 +11,10 @@ import SignUp from './pages/SignUp';
 import Dashboard from './pages/Dashboard';
 import Profile from './pages/Profile';
 import Chat from './pages/Chat';
-import Quiz from './pages/Quiz';
+import Multiple from './pages/Multiple';
+import Essay from './pages/Essay';
 import Rank from './pages/Rank';
+import Feedback from './pages/Feedback';
 
 export default (isSigned = false) =>
   createAppContainer(
@@ -28,7 +30,9 @@ export default (isSigned = false) =>
               screen: createStackNavigator(
                 {
                   Dashboard,
-                  Quiz,
+                  Multiple,
+                  Essay,
+                  Feedback,
                 },
                 {
                   defaultNavigationOptions: {

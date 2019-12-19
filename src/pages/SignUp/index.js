@@ -32,6 +32,7 @@ export default function SignUp({ navigation }) {
 
   function handleSubmit() {
     dispatch(signUpRequest(name, course, email, password));
+    navigation.navigate('SignIn');
   }
 
   return (

@@ -4,6 +4,8 @@ import { useSelector } from 'react-redux';
 import { withNavigationFocus } from 'react-navigation';
 import ProgressBarAnimated from 'react-native-progress-bar-animated';
 
+import api from '~/services/api';
+
 import Background from '~/components/Background';
 
 import {
@@ -21,6 +23,22 @@ function Dashboard({ isFocused, navigation }) {
   const profile = useSelector(state => state.user.profile);
 
   const percent = (profile.points * 100) / (1000 * profile.level);
+
+  async function handleStart() {
+    const response = await api.get('questions', {
+      params: {
+        quiz: 'true',
+        limit: 1,
+        course: profile.course,
+      },
+    });
+
+    if (response.data.questions[0].correct_answer !== null) {
+      navigation.navigate('Multiple', response.data.questions[0].id);
+    } else {
+      navigation.navigate('Essay', response.data.questions[0].id);
+    }
+  }
 
   return (
     <Background>
@@ -45,12 +63,7 @@ function Dashboard({ isFocused, navigation }) {
           />
           <Separator />
         </InfoBox>
-        <QuizButton
-          onPress={() => {
-            navigation.navigate('Quiz');
-          }}>
-          Iniciar Quiz
-        </QuizButton>
+        <QuizButton onPress={() => handleStart()}>Iniciar Quiz</QuizButton>
       </Container>
     </Background>
   );

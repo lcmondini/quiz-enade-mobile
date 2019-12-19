@@ -30,8 +30,6 @@ function Rank({ isFocused, navigation }) {
     }
   }, [isFocused, profile.course, profile.email]);
 
-  console.tron.log(users);
-
   return (
     <Background>
       <Container>

@@ -121,6 +121,7 @@ def enableHermes = project.ext.react.get("enableHermes", false);
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -179,6 +180,7 @@ android {
 }
 
 dependencies {
+    implementation project(':@react-native-community_async-storage')
     implementation project(':react-native-vector-icons')
     implementation project(':react-native-linear-gradient')
     implementation fileTree(dir: "libs", include: ["*.jar"])
@@ -209,15 +211,13 @@ android {
 
     defaultConfig {
         targetSdkVersion 23 // Upgrade target to 23 (You will need use this to check android permission correctly)
-        ...
     }
-    ...
+
 }
 
 
 // update dependencies
 dependencies {
-    ...
     // Paste these line
     implementation(project(':react-native-maps')){
         exclude group: 'com.google.android.gms', module: 'play-services-base'

@@ -10,21 +10,32 @@ import api from '~/services/api';
 import Background from '~/components/Background';
 import { updatePointsRequest } from '~/store/modules/user/actions';
 
-import { Container, List, Info, Description, SubmitButton } from './styles';
+import {
+  Container,
+  List,
+  Image,
+  Info,
+  Description,
+  SubmitButton,
+} from './styles';
 
-function Quiz({ isFocused, navigation }) {
+function Multiple({ isFocused, navigation }) {
   const dispatch = useDispatch();
   const profile = useSelector(state => state.user.profile);
   const [questions, setQuestions] = useState([]);
   const [options, setOptions] = useState([]);
+  const [visible, setVisible] = useState(false);
+
+  const id = navigation.state.params;
 
   useEffect(() => {
     async function loadQuestions() {
       const response = await api.get('questions', {
         params: {
           quiz: 'true',
-          limit: 10,
+          limit: 1,
           course: profile.course,
+          id,
         },
       });
       setQuestions(response.data.questions);
@@ -32,7 +43,7 @@ function Quiz({ isFocused, navigation }) {
     if (isFocused) {
       loadQuestions();
     }
-  }, [isFocused, profile.course]);
+  }, [id, isFocused, profile.course]);
 
   useEffect(() => {
     function loadOptions() {
@@ -74,11 +85,21 @@ function Quiz({ isFocused, navigation }) {
         }),
       );
     }
+    function loadVisible() {
+      if (questions[0] !== undefined && questions[0].image === null) {
+        setVisible(false);
+      } else if (questions[0] !== undefined && questions[0].image !== null) {
+        setVisible(true);
+      }
+    }
     loadOptions();
+    loadVisible();
   }, [questions]);
 
   function handleSubmit() {
     let count = 0;
+    let countCorrect = 0;
+    let correctAnswer = '';
     options.map(function(option) {
       option.map(function(obj) {
         if (obj.checked) {
@@ -86,7 +107,7 @@ function Quiz({ isFocused, navigation }) {
         }
       });
     });
-    if (count < 10) {
+    if (count < 1) {
       Alert.alert(
         'Aviso',
         'Favor responder todas as questões antes de finalizar!',
@@ -99,8 +120,12 @@ function Quiz({ isFocused, navigation }) {
         option.map(function(obj) {
           if (obj.checked && obj.option === obj.correctOption) {
             points += 100;
+            countCorrect += 1;
+            correctAnswer = obj.option;
           } else if (obj.checked && obj.option !== obj.correctOption) {
             points += 25;
+          } else if (obj.option === obj.correctOption) {
+            correctAnswer = obj.option;
           }
         });
       });
@@ -111,7 +136,11 @@ function Quiz({ isFocused, navigation }) {
       }
 
       dispatch(updatePointsRequest({ name, email, level, points }));
-      navigation.navigate('Dashboard');
+      // navigation.navigate('Dashboard');
+      navigation.navigate('Feedback', {
+        countCorrect,
+        correctAnswer,
+      });
     }
   }
 
@@ -143,6 +172,13 @@ function Quiz({ isFocused, navigation }) {
           renderItem={({ item }) => (
             <Info>
               <Description>{item.description}</Description>
+              {visible ? (
+                <Image
+                  source={{
+                    uri: item.image ? item.image.url : '',
+                  }}
+                />
+              ) : null}
               {options.map(option => {
                 return option.map(obj => {
                   if (obj.id === String(item.id)) {
@@ -171,7 +207,7 @@ function Quiz({ isFocused, navigation }) {
   );
 }
 
-Quiz.navigationOptions = ({ navigation }) => ({
+Multiple.navigationOptions = ({ navigation }) => ({
   title: 'Questionário',
   headerLeft: () => (
     <TouchableOpacity
@@ -183,4 +219,4 @@ Quiz.navigationOptions = ({ navigation }) => ({
   ),
 });
 
-export default withNavigationFocus(Quiz);
+export default withNavigationFocus(Multiple);

@@ -11,6 +11,12 @@ export const List = styled.FlatList.attrs({
   contentContainerStyle: { padding: 30 },
 })``;
 
+export const Image = styled.Image`
+  width: 200px;
+  height: 200px;
+  align-self: center;
+`;
+
 export const Info = styled.View`
   margin-left: 15px;
   margin-top: 30px;

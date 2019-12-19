@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Image } from 'react-native';
+import { Image, Alert, TouchableOpacity } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import logo from '~/assets/logo-lasalle-shield.png';
@@ -56,10 +56,9 @@ export default function SignIn({ navigation }) {
             value={password}
             onChangeText={setPassword}
           />
-
-          <SubmitButton loading={loading} onPress={handleSubmit}>
-            Acessar
-          </SubmitButton>
+          <TouchableOpacity loading={loading} onPress={handleSubmit}>
+            <SubmitButton>Acessar</SubmitButton>
+          </TouchableOpacity>
         </Form>
 
         <SignLink
