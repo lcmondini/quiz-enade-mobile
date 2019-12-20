@@ -52,12 +52,13 @@ export const Separator = styled.View`
   margin: 20px 0 10px;
 `;
 
-export const QuizButton = styled(Button)`
+export const QuizButton = styled.TouchableOpacity`
   background: #ea4335;
   font-weight: bold;
   margin-top: 150px;
   height: 150px;
   width: 150px;
   border-radius: 75px;
-  align-self: center;
+  justify-content: center;
+  align-items: center;
 `;

@@ -63,7 +63,9 @@ function Dashboard({ isFocused, navigation }) {
           />
           <Separator />
         </InfoBox>
-        <QuizButton onPress={() => handleStart()}>Iniciar Quiz</QuizButton>
+        <QuizButton onPress={() => handleStart()}>
+          <Text>Iniciar Quiz</Text>
+        </QuizButton>
       </Container>
     </Background>
   );

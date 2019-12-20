@@ -1,8 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { withNavigationFocus } from 'react-navigation';
-import { TouchableOpacity, View, Alert } from 'react-native';
+import {
+  TouchableOpacity,
+  View,
+  Alert,
+  Modal,
+  Button,
+  SafeAreaView,
+} from 'react-native';
 import { CheckBox } from 'react-native-elements';
+import ImageViewer from 'react-native-image-zoom-viewer';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import api from '~/services/api';
@@ -25,6 +33,7 @@ function Multiple({ isFocused, navigation }) {
   const [questions, setQuestions] = useState([]);
   const [options, setOptions] = useState([]);
   const [visible, setVisible] = useState(false);
+  const [show, setShow] = useState(false);
 
   const id = navigation.state.params;
 
@@ -163,6 +172,20 @@ function Multiple({ isFocused, navigation }) {
     );
   }
 
+  let images;
+
+  if (questions[0] !== undefined && questions[0].image !== null) {
+    images = [
+      {
+        url: questions[0].image.url,
+      },
+    ];
+  }
+
+  function handleShow() {
+    setShow(!show);
+  }
+
   return (
     <Background>
       <Container>
@@ -172,12 +195,17 @@ function Multiple({ isFocused, navigation }) {
           renderItem={({ item }) => (
             <Info>
               <Description>{item.description}</Description>
+              <Modal visible={show} transparent>
+                <ImageViewer imageUrls={images} />
+                <Button title="Fechar" onPress={() => handleShow()} />
+              </Modal>
               {visible ? (
-                <Image
-                  source={{
-                    uri: item.image ? item.image.url : '',
-                  }}
-                />
+                <TouchableOpacity onPress={() => handleShow()}>
+                  <Image
+                    resizeMode="contain"
+                    source={{ uri: item.image.url }}
+                  />
+                </TouchableOpacity>
               ) : null}
               {options.map(option => {
                 return option.map(obj => {

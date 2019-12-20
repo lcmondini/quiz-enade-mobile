@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { withNavigationFocus } from 'react-navigation';
-import { TouchableOpacity, View, Alert } from 'react-native';
+import { TouchableOpacity, Modal, Alert, Button } from 'react-native';
+import ImageViewer from 'react-native-image-zoom-viewer';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import api from '~/services/api';
@@ -26,6 +27,7 @@ function Essay({ isFocused, navigation }) {
   const [answer, setAnswer] = useState('');
   const [image, setImage] = useState([]);
   const [visible, setVisible] = useState(false);
+  const [show, setShow] = useState(false);
 
   const id = navigation.state.params;
 
@@ -51,7 +53,7 @@ function Essay({ isFocused, navigation }) {
     if (isFocused) {
       loadQuestions();
     }
-  }, [id, image, isFocused, profile.course]);
+  }, [isFocused]); // eslint-disable-line
 
   async function handleSubmit() {
     try {
@@ -82,17 +84,33 @@ function Essay({ isFocused, navigation }) {
     }
   }
 
+  const images = [
+    {
+      url: image.url,
+    },
+  ];
+
+  function handleShow() {
+    setShow(!show);
+  }
+
   return (
     <Background>
       <Container>
         <Form>
           <Description>{description}</Description>
+          <Modal style={{ margin: 0 }} visible={show} transparent>
+            <ImageViewer imageUrls={images} />
+            <Button title="Fechar" onPress={() => handleShow()} />
+          </Modal>
           {visible ? (
-            <Image
-              source={{
-                uri: image ? image.url : '',
-              }}
-            />
+            <TouchableOpacity onPress={() => handleShow()}>
+              <Image
+                resizeMode="contain"
+                source={{ uri: image.url }}
+                onSwipeDown={() => handleShow()}
+              />
+            </TouchableOpacity>
           ) : null}
           <FormInput
             multiline
